@@ -1,6 +1,7 @@
 <?php
 include "templates/header.php";
 
+
 ?>
 <main class="container">
     <h1 id="main-text">Tampilkan Kata Kata Disini</h1>
@@ -10,7 +11,9 @@ include "templates/header.php";
             <button type="submit" class="btn btn-success">Tampilkan</button>
         </div>
     </form>
-    <h3><?= $_GET["kata"]; ?></h3>
+    <?php if(isset($_GET["kata"])): ?>
+        <h3><?= $_GET["kata"]; ?></h3>
+    <?php endif; ?>
 
     <a href="index.php">Kembali ke halaman utama</a>
 </main>
