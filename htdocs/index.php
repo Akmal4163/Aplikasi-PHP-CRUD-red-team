@@ -16,7 +16,7 @@ include "templates/header.php";
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
                             Tambah Barang
                         </button>
-                        <form method="GET" action="" class="d-flex gap-3" role="search">
+                        <form id="search-form" class="d-flex gap-3" hx-get="tabel.php" hx-target="#wadah-tabel" hx-trigger="submit" hx-push-url="true">
                             <input class="form-control me-2" type="text" name="cari" placeholder="Cari Nama Barang" aria-label="Search" />
                             <button class="btn btn-outline-success" type="submit">Cari</button>
                             <a href="index.php" class="btn btn-outline-secondary">Reset</a>
@@ -46,107 +46,10 @@ include "templates/header.php";
                 </div>
             <?php endif; ?>
         </div>
-        <div class="card">
-            <table class="table table-striped">
-                <thead>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nama Barang</th>
-                    <th scope="col">Harga</th>
-                    <th scope="col">Dibuat Tanggal</th>
-                    <th scope="col">Aksi</th>
-                </thead>
-                <tbody>
-                    <?php
-                    $cari = isset($_GET['cari']) ? $_GET['cari'] : '';
-                    $jumlah_data_per_halaman = 5;
 
-                    $wildcard = '%'.$cari.'%';
-
-                    if ($cari != '') {
-                        $safe_query = mysqli_prepare($koneksi, "SELECT id FROM barang WHERE nama_barang LIKE ?");
-                        mysqli_stmt_bind_param($safe_query, 's', $wildcard);
-                        mysqli_stmt_execute($safe_query);
-                        $query_id = mysqli_stmt_get_result($safe_query);
-                    } else {
-                        $query_id = mysqli_query($koneksi, "SELECT id FROM barang");
-                    }
-
-                    $total_data = mysqli_num_rows($query_id);
-                    $total_halaman = ceil($total_data / $jumlah_data_per_halaman);
-
-                    $halaman_aktif = (isset($_GET['halaman']) && (int)$_GET["halaman"] > 0) ? (int)$_GET["halaman"] : 1;
-
-                    if ($halaman_aktif > $total_halaman && $total_halaman > 0) {
-                        $halaman_aktif = $total_halaman;
-                    }
-
-                    $awal_data = ($jumlah_data_per_halaman * $halaman_aktif) - $jumlah_data_per_halaman;
-
-                    if ($cari != '') {
-                        $sql1 = "SELECT * FROM barang WHERE nama_barang LIKE '$cari' ORDER BY id DESC LIMIT $awal_data, $jumlah_data_per_halaman";
-                        $q1 = mysqli_query($koneksi, $sql1);
-                    } else {
-                        $sql1 = "SELECT * FROM barang ORDER BY id DESC LIMIT $awal_data, $jumlah_data_per_halaman";
-                        $q1 = mysqli_query($koneksi, $sql1);
-                    }
-
-                    $nomor = $awal_data + 1;
-                    ?>
-                    <?php if (mysqli_num_rows($q1) == 0) : ?>
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">Data tidak ditemukan.</td>
-                        </tr>
-                    <?php endif; ?>
-                    <?php while ($data1 = mysqli_fetch_array($q1)): ?>
-                        <tr>
-                            <td scope="row"><?= $nomor++; ?></td>
-                            <td scope="row"><?= $data1['nama_barang']; ?></td>
-                            <td scope="row"><?= $data1['harga']; ?></td>
-                            <td scope="row"><?= $data1['dibuat_tanggal']; ?></td>
-                            <td scope="row">
-                                <button type="button"
-                                    class="btn btn-warning"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalEdit"
-                                    data-id="<?= $data1['id']; ?>"
-                                    data-nama="<?= $data1['nama_barang']; ?>"
-                                    data-harga="<?= $data1['harga']; ?>">
-                                    Edit
-                                </button>
-                                <button type="button"
-                                    class="btn btn-danger"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalHapus"
-                                    data-id="<?= $data1['id']; ?>">
-                                    Hapus
-                                </button>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-            <!-- Navigasi Pagination -->
-            <nav class="mt-3 ms-3">
-                <ul class="pagination">
-                    <?php $cari_url = isset($_GET['cari']) ? '&cari=' . $_GET['cari'] : ''; ?>
-                    <!-- Tombol Previous -->
-                    <li class="page-item <?= ($halaman_aktif <= 1) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?halaman=<?= $halamanAktif - 1 . $cari_url; ?>">Sebelumnya</a>
-                    </li>
-
-                    <!-- Nomor Halaman -->
-                    <?php for ($i = 1; $i <= $total_halaman; $i++): ?>
-                        <li class="page-item <?= ($i == $halaman_aktif) ? 'active' : ''; ?>">
-                            <a class="page-link" href="?halaman=<?= $i . $cari_url ?>"><?= $i; ?></a>
-                        </li>
-                    <?php endfor; ?>
-
-                    <!-- Tombol Next -->
-                    <li class="page-item <?= ($halaman_aktif >= $total_halaman) ? 'disabled' : ''; ?>">
-                        <a class="page-link" href="?halaman=<?= $halaman_aktif + 1 . $cari_url; ?>">Berikutnya</a>
-                    </li>
-                </ul>
-            </nav>
+        <!-- Tabel data dari database ditampilkan disini (lihat "tabel.php") -->
+        <div id="wadah-tabel" hx-get="tabel.php?<?= $_SERVER['QUERY_STRING'] ?>" hx-trigger="load">
+            <p class="text-center">Memuat data....</p>
         </div>
 
         <!-- Modal window untuk tambah data -->
