@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Waktu pembuatan: 31 Jan 2026 pada 08.26
+-- Waktu pembuatan: 12 Feb 2026 pada 15.08
 -- Versi server: 12.1.2-MariaDB-ubu2404
 -- Versi PHP: 8.3.30
 
@@ -48,7 +48,9 @@ INSERT INTO `barang` (`id`, `nama_barang`, `harga`, `dibuat_tanggal`) VALUES
 (8, 'Tempe', '2000', '2026-01-27'),
 (10, 'Ayam', '5000', '2026-01-27'),
 (11, 'Kedelai', '1000', '2026-01-27'),
-(13, 'Kedelai hijau', '3000', '2026-01-28');
+(13, 'Kedelai hijau', '3000', '2026-01-28'),
+(15, 'Sosis', '2000', '2026-02-05'),
+(16, 'Tahu', '2000', '2026-02-12');
 
 -- --------------------------------------------------------
 
@@ -70,7 +72,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `email`, `password`, `created_at`) VALUES
 (1, 'akmal4163', 'bebekngayang@gmail.com', '$2y$12$MyB6OwivCcXWq32h7Xivtuki15.2J5f.fsbCOd73QTW7Qh30osmP.', '2026-01-27'),
-(2, 'admin', 'admin@gmail.com', '$2y$12$JcM8BTiTzykn.l0wasvwKeegW8OiIgd5PFQCtp1k..UcZ.3MnyVZ.', '2026-01-28');
+(4, 'admin', 'admin@admin.com', '$2y$12$RrJZ9Wk7xR95.Vq4ANyt4OwDOtpqxa6Y3KMIwVh65k6XPbUPk4TlO', '2026-02-12');
 
 --
 -- Indeks untuk tabel yang dibuang
@@ -98,13 +100,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT untuk tabel `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
